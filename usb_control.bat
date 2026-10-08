@@ -29,6 +29,8 @@ if not defined USB_CONTROL_PASSWORD (
     exit /b 1
 )
 
+set "USB_CONTROL_SCRIPT_DIR=%~dp0"
+
 rem Lit l'état actuel du service USBSTOR dans le registre.
 set "USB_CURRENT="
 for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_CURRENT=%%A"
@@ -65,6 +67,7 @@ if "%ACTION%"=="1" (
 ) else (
     echo.
     echo Option invalide.
+    call :LOG "INCONNUE" "OPTION_INVALIDE"
     pause
     exit /b 1
 )
@@ -74,6 +77,7 @@ powershell -NoProfile -Command "$secure = Read-Host 'Saisissez le mot de passe' 
 if errorlevel 1 (
     echo.
     echo Mot de passe incorrect.
+    call :LOG "%ACTION_NAME%" "MOT_DE_PASSE_INCORRECT"
     pause
     exit /b 1
 )
@@ -83,6 +87,7 @@ set /p CONFIRM=Confirmez-vous la modification ? Tapez OUI :
 if /i not "%CONFIRM%"=="OUI" (
     echo.
     echo Modification annulée.
+    call :LOG "%ACTION_NAME%" "ANNULATION"
     pause
     exit /b 0
 )
@@ -92,6 +97,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 
 if errorlevel 1 (
     echo.
     echo Échec de l'écriture dans le Registre Windows.
+    call :LOG "%ACTION_NAME%" "ECHEC_ECRITURE_REGISTRE"
     pause
     exit /b 1
 )
@@ -102,11 +108,24 @@ for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSe
 if /i not "%USB_VERIFY%"=="0x%USB_START%" (
     echo.
     echo Vérification échouée. Valeur attendue : 0x%USB_START% ; valeur lue : %USB_VERIFY%.
+    call :LOG "%ACTION_NAME%" "ECHEC_VERIFICATION"
     pause
     exit /b 1
 )
 
 echo.
 echo Stockage USB %ACTION_NAME% avec succès.
+call :LOG "%ACTION_NAME%" "SUCCES"
 echo.
 pause
+exit /b 0
+
+:LOG
+set "USB_LOG_ACTION=%~1"
+set "USB_LOG_RESULT=%~2"
+powershell -NoProfile -Command "$line = '{0}; action={1}; resultat={2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $env:USB_LOG_ACTION, $env:USB_LOG_RESULT; Add-Content -LiteralPath (Join-Path $env:USB_CONTROL_SCRIPT_DIR 'usb_control.log') -Value $line -Encoding utf8"
+if errorlevel 1 (
+    echo Impossible d'ecrire dans le journal usb_control.log.
+    exit /b 1
+)
+exit /b 0

@@ -28,6 +28,10 @@ d’administrateur sont nécessaires et seront demandés automatiquement. Après
 la modification, le script relit la valeur du Registre afin de vérifier que le
 changement a bien été appliqué.
 
+Les opérations et leurs résultats sont ajoutés à `usb_control.log`, à côté du
+script. Le journal contient la date, l’action et le résultat, jamais le mot de
+passe.
+
 ## Remarques
 
 - Le verrouillage concerne les périphériques de stockage USB ; les autres
