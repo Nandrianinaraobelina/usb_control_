@@ -1,4 +1,4 @@
-function Write-OperationLog {
+﻿function Write-OperationLog {
     param(
         [Parameter(Mandatory)][string]$Action,
         [Parameter(Mandatory)][string]$Result

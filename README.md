@@ -24,8 +24,9 @@ Le script principal charge les modules de `src/Modules/` au démarrage.
 
 Dans VS Code, installez l’extension **PowerShell** de Microsoft (`ms-vscode.powershell`).
 Le projet sélectionne son formateur PowerShell, applique le style OTBS et formate
-les fichiers `.ps1` à l’enregistrement. Vous pouvez aussi lancer **Format Document**
-depuis la palette de commandes.
+les fichiers `.ps1` en UTF-8 avec BOM à l’enregistrement pour préserver les accents
+dans Windows PowerShell 5.1. Vous pouvez aussi lancer **Format Document** depuis la
+palette de commandes.
 
 ## Aperçu
 

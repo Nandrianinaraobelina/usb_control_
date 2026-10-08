@@ -1,4 +1,4 @@
-function Show-Message {
+﻿function Show-Message {
     param(
         [Parameter(Mandatory)][string]$Text,
         [string]$Caption = 'Contrôle du stockage USB',

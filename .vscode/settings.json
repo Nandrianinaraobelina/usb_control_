@@ -1,7 +1,8 @@
 {
   "[powershell]": {
     "editor.defaultFormatter": "ms-vscode.powershell",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "files.encoding": "utf8bom"
   },
   "powershell.codeFormatting.preset": "OTBS",
   "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
