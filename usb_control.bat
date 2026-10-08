@@ -49,9 +49,8 @@ if "%ACTION%"=="1" (
 )
 
 echo.
-set /p INPUT=Ampidiro ny tenimiafina:
-
-if not "%INPUT%"=="%USB_CONTROL_PASSWORD%" (
+powershell -NoProfile -Command "$secure = Read-Host 'Ampidiro ny tenimiafina' -AsSecureString; $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure); try { $entered = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer); if ($entered -cne $env:USB_CONTROL_PASSWORD) { exit 1 } } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }"
+if errorlevel 1 (
     echo.
     echo Diso ny tenimiafina!
     pause
