@@ -40,8 +40,9 @@ script l’indique.
 
 Avant le premier verrouillage ou déverrouillage, la valeur initiale de `Start`
 est enregistrée dans `usb_control.previous`, à côté du script. L’option `3`
-restaure cette valeur. Conservez ce fichier si vous souhaitez pouvoir revenir
-à la configuration d’origine.
+restaure cette valeur. Le fichier est marqué en lecture seule pour éviter une
+modification accidentelle. Conservez-le si vous souhaitez pouvoir revenir à la
+configuration d’origine.
 
 Les opérations et leurs résultats sont ajoutés à `usb_control.log`, à côté du
 script. Le journal contient la date, l’action et le résultat, jamais le mot de

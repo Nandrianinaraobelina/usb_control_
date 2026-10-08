@@ -170,6 +170,14 @@ if "%USB_RESTORE%"=="0" if not exist "%USB_CONTROL_SCRIPT_DIR%usb_control.previo
         pause
         exit /b 1
     )
+    attrib +R "%USB_CONTROL_SCRIPT_DIR%usb_control.previous" >nul
+    if errorlevel 1 (
+        echo.
+        echo Impossible de proteger la sauvegarde contre une modification accidentelle.
+        call :LOG "%ACTION_NAME%" "ECHEC_PROTECTION_SAUVEGARDE"
+        pause
+        exit /b 1
+    )
 )
 
 rem Modifie la valeur USBSTOR dans le registre Windows.
