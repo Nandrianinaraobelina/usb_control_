@@ -190,7 +190,7 @@ function Invoke-UsbAction {
 
     try {
         Write-OperationLog -Action $actionName -Result 'SUCCES'
-        $script:MessageLabel.Text = "Opération réussie : $actionName."
+        $script:MessageLabel.Text = "Succès : $actionName. Si besoin, débranchez/rebranchez le périphérique ou redémarrez Windows."
         $script:MessageLabel.ForeColor = [Drawing.Color]::FromArgb(91, 220, 160)
     } catch {
         Show-Message -Text "La modification a réussi, mais le journal n’a pas pu être écrit : $($_.Exception.Message)" -Icon Error

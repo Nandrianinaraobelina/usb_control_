@@ -54,6 +54,8 @@ La photo d’arrière-plan de l’application est `assets/usb-control-background
 Le script modifie la valeur `Start` du service Windows `USBSTOR`, puis vérifie
 que la modification a bien été appliquée. Si le stockage est déjà dans l’état
 demandé, le Registre n’est pas réécrit.
+Après une modification réussie, si le changement USB ne prend pas effet,
+débranchez puis rebranchez le périphérique ou redémarrez Windows.
 
 Les disques USB déjà connectés peuvent rester accessibles après le verrouillage.
 Le script affiche un avertissement et demande confirmation avant de continuer.
