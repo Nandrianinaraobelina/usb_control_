@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001 >nul
 title Contrôle du stockage USB
 color 0A
@@ -9,10 +10,10 @@ if errorlevel 1 (
     rem Relance le script avec l'élévation UAC si nécessaire.
     set "USB_CONTROL_SCRIPT=%~f0"
     powershell -NoProfile -Command "try { Start-Process -FilePath $env:USB_CONTROL_SCRIPT -Verb RunAs -ErrorAction Stop; exit 0 } catch { if ($_.Exception.NativeErrorCode -eq 1223) { exit 1223 }; exit 1 }"
-    set "UAC_RESULT=%ERRORLEVEL%"
-    if not "%UAC_RESULT%"=="0" (
+    set "UAC_RESULT=!ERRORLEVEL!"
+    if not "!UAC_RESULT!"=="0" (
         echo.
-        if "%UAC_RESULT%"=="1223" (
+        if "!UAC_RESULT!"=="1223" (
             echo Vous avez annulé la demande d'autorisation administrateur.
         ) else (
             echo Impossible de relancer le script avec les droits administrateur.
@@ -70,11 +71,22 @@ echo.
 echo 1. Verrouiller le stockage USB
 echo 2. Déverrouiller le stockage USB
 echo 3. Restaurer la valeur initiale du Registre
-echo 4. Quitter
+echo 4. Ouvrir le journal des opérations
+echo 5. Quitter
 echo.
-set /p ACTION=Choisissez une option (1, 2, 3 ou 4) :
+set /p ACTION=Choisissez une option (1, 2, 3, 4 ou 5) :
 
-if "%ACTION%"=="4" exit /b 0
+if "%ACTION%"=="5" exit /b 0
+if "%ACTION%"=="4" (
+    if exist "%USB_CONTROL_SCRIPT_DIR%usb_control.log" (
+        start "" notepad.exe "%USB_CONTROL_SCRIPT_DIR%usb_control.log"
+    ) else (
+        echo.
+        echo Le journal des opérations n'existe pas encore.
+        pause
+    )
+    exit /b 0
+)
 set "USB_RESTORE=0"
 if "%ACTION%"=="1" (
     rem La valeur 4 désactive le service USBSTOR.
@@ -116,6 +128,27 @@ if "%USB_RESTORE%"=="1" (
     set "USB_EXPECTED=0x%USB_START%"
 )
 
+if /i "%USB_CURRENT%"=="%USB_EXPECTED%" (
+    echo.
+    echo Le stockage USB est déjà dans l'état demandé. Aucune modification du Registre n'est nécessaire.
+    call :LOG "%ACTION_NAME%" "DEJA_CONFIGURE"
+    pause
+    exit /b 0
+)
+
+if "%ACTION%"=="1" if defined USB_CONNECTED_COUNT if %USB_CONNECTED_COUNT% GTR 0 (
+    echo.
+    echo ATTENTION : un ou plusieurs disques USB sont connectes et peuvent rester accessibles apres le verrouillage.
+    echo Deconnectez-les avant de continuer si vous souhaitez bloquer leur acces.
+    set /p USB_LOCK_CONFIRM=Continuer malgre cet avertissement ? Tapez OUI :
+    if /i not "!USB_LOCK_CONFIRM!"=="OUI" (
+        echo Verrouillage annule.
+        call :LOG "%ACTION_NAME%" "ANNULATION_DISQUE_CONNECTE"
+        pause
+        exit /b 0
+    )
+)
+
 echo.
 powershell -NoProfile -Command "$secure = Read-Host 'Saisissez le mot de passe' -AsSecureString; $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure); try { $entered = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer); if ($entered -cne $env:USB_CONTROL_PASSWORD) { exit 1 } } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }"
 if errorlevel 1 (
@@ -147,6 +180,14 @@ if "%USB_RESTORE%"=="0" if not exist "%USB_CONTROL_SCRIPT_DIR%usb_control.previo
         echo.
         echo Impossible d'enregistrer la valeur initiale du Registre.
         call :LOG "%ACTION_NAME%" "ECHEC_SAUVEGARDE"
+        pause
+        exit /b 1
+    )
+    attrib +R "%USB_CONTROL_SCRIPT_DIR%usb_control.previous" >nul
+    if errorlevel 1 (
+        echo.
+        echo Impossible de proteger la sauvegarde contre une modification accidentelle.
+        call :LOG "%ACTION_NAME%" "ECHEC_PROTECTION_SAUVEGARDE"
         pause
         exit /b 1
     )
