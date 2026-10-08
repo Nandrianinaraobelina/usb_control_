@@ -2,10 +2,10 @@
 title Fifehezana ny USB
 color 0A
 
-rem Jereo raha efa mandeha amin'ny maha-mpitantana ity rakitra ity.
+rem Vérifie si le script est déjà exécuté en tant qu'administrateur.
 fltmc >nul 2>&1
 if errorlevel 1 (
-    rem Avereno alefa amin'ny alalan'ny UAC raha mbola tsy manana alalana.
+    rem Relance le script avec l'élévation UAC si nécessaire.
     set "USB_CONTROL_SCRIPT=%~f0"
     powershell -NoProfile -Command "try { Start-Process -FilePath $env:USB_CONTROL_SCRIPT -Verb RunAs -ErrorAction Stop; exit 0 } catch { if ($_.Exception.NativeErrorCode -eq 1223) { exit 1223 }; exit 1 }"
     set "UAC_RESULT=%ERRORLEVEL%"
@@ -29,7 +29,7 @@ if not defined USB_CONTROL_PASSWORD (
     exit /b 1
 )
 
-rem Vakio ny sata USBSTOR ankehitriny ao amin'ny rejisitra.
+rem Lit l'état actuel du service USBSTOR dans le registre.
 set "USB_CURRENT="
 for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_CURRENT=%%A"
 
@@ -53,11 +53,11 @@ echo.
 set /p ACTION=Misafidiana (1 na 2):
 
 if "%ACTION%"=="1" (
-    rem Ny sanda 4 dia manakana ny USBSTOR.
+    rem La valeur 4 désactive le service USBSTOR.
     set "USB_START=4"
     set "ACTION_NAME=MIHIDY"
 ) else if "%ACTION%"=="2" (
-    rem Ny sanda 3 dia mamerina ny USBSTOR.
+    rem La valeur 3 réactive le service USBSTOR.
     set "USB_START=3"
     set "ACTION_NAME=MISOKATRA"
 ) else (
@@ -85,7 +85,7 @@ if /i not "%CONFIRM%"=="ENY" (
     exit /b 0
 )
 
-rem Ovay ny fikirakirana USBSTOR ao amin'ny rejisitra Windows.
+rem Modifie la valeur USBSTOR dans le registre Windows.
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start /t REG_DWORD /d %USB_START% /f >nul
 if errorlevel 1 (
     echo.
@@ -94,7 +94,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-rem Hamarino fa voasoratra marina ny sanda nangatahana.
+rem Vérifie que la valeur demandée a bien été écrite.
 set "USB_VERIFY="
 for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_VERIFY=%%A"
 if /i not "%USB_VERIFY%"=="0x%USB_START%" (

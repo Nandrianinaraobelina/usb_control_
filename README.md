@@ -1,39 +1,38 @@
-# Fifehezana ny fitahirizana USB
+# Contrôle du stockage USB
 
-Ity tetikasa ity dia misy rakitra Windows iray, `usb_control.bat`, izay
-ahafahana manidy na manokatra indray ny fitaovana fitahirizana USB.
+Ce projet contient un script Windows unique, `usb_control.bat`, qui permet de
+verrouiller ou de déverrouiller les périphériques de stockage USB.
 
-## Sary
+## Aperçu
 
-![Menu fifehezana ny USB](usb-control-menu.png)
+![Menu de contrôle USB](usb-control-menu.png)
 
-## Fampiasana
+## Utilisation
 
-1. Mamoròna environment variable `USB_CONTROL_PASSWORD` ao amin'ny kaontinao
-   Windows, ary apetraho ao ny tenimiafina tianao hampiasaina.
-2. Akatòny ary sokafy indray ny terminal na ny session Windows mba hampiharana
-   ilay variable.
-3. Alefaso ny `usb_control.bat`. Hangataka ho azy ny alalana ho mpitantana
-   amin'ny alalan'ny Windows (UAC) ilay rakitra. Raha lavinao na nofoananao
-   ilay fangatahana, dia hampiseho hafatra mazava ilay script.
-4. Jereo aloha ny sata ankehitriny asehon'ny script. Avy eo safidio ny safidy
-   ao amin'ny menu:
-   - `1` hanidy ny fitahirizana USB;
-   - `2` hanokatra indray azy.
-5. Ampidiro ilay tenimiafina napetraka. Tsy hiseho eo amin'ny efijery ny
-   soratra rehefa manoratra azy ianao.
-6. Soraty `ENY` raha hanamafy ny fanovana ao amin'ny rejisitra Windows.
+1. Créez la variable d’environnement Windows `USB_CONTROL_PASSWORD` pour votre
+   compte et définissez le mot de passe de votre choix.
+2. Fermez puis rouvrez votre terminal ou votre session Windows pour que la
+   variable soit prise en compte.
+3. Lancez `usb_control.bat`. Windows demandera automatiquement l’autorisation
+   d’administrateur via l’UAC. Si vous refusez ou annulez la demande, le script
+   affichera un message explicite.
+4. Consultez l’état actuel affiché, puis choisissez une option dans le menu :
+   - `1` pour verrouiller le stockage USB ;
+   - `2` pour le déverrouiller.
+5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
+6. Tapez `ENY` pour confirmer la modification du Registre Windows.
 
-Manova ny sanda `Start` an'ny service Windows `USBSTOR` ilay script. Ilaina ny
-alalana ho mpitantana, ary hangatahana ho azy izany. Aorian'ny fanovana dia
-hamerina hamaky ny sanda ao amin'ny rejisitra ilay script mba hanamarinana fa
-voaray ny fanovana.
+Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
+d’administrateur sont nécessaires et seront demandés automatiquement. Après
+la modification, le script relit la valeur du Registre afin de vérifier que le
+changement a bien été appliqué.
 
-## Fanamarihana
+## Remarques
 
-- Ny fitaovana fitahirizana USB ihany no voakasiky ny fanidiana; mety mbola
-  hiasa ny fitaovana USB hafa toy ny klavier sy ny souris.
-- Tsy voatahiry ao amin'ny rakitra tetikasa ny tenimiafina. Azo vakin'ny
-  kaontinao Windows ilay environment variable, ka tsy fiarovana amin'ny olona
-  afaka mampiasa io kaonty io izany.
-- Raha hanokatra indray ny fitahirizana USB, safidio ny `2`.
+- Le verrouillage concerne les périphériques de stockage USB ; les autres
+  périphériques USB, comme les claviers et les souris, peuvent continuer à
+  fonctionner.
+- Le mot de passe n’est pas enregistré dans les fichiers du projet. La variable
+  d’environnement reste accessible à votre compte Windows et ne protège pas
+  contre une personne ayant accès à cette session.
+- Pour déverrouiller le stockage USB, choisissez l’option `2`.
