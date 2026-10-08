@@ -34,6 +34,10 @@ palette de commandes.
 
 La photo d’arrière-plan de l’application est `assets/usb-control-background.jpg`.
 
+## Auteur
+
+Application développée par [Hery Nandrianina](https://herynandrianina-portfolio.onrender.com/).
+
 ## Utilisation
 
 1. Créez la variable d’environnement Windows `USB_CONTROL_PASSWORD` pour votre

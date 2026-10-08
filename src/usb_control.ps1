@@ -129,13 +129,37 @@ $script:MessageLabel.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 $script:MessageLabel.Text = 'Choisissez une action. Les opérations sensibles demandent confirmation.'
 $script:MessageLabel.ForeColor = [Drawing.Color]::LightGray
 
-$footer = New-Object Windows.Forms.Label
+$footer = New-Object Windows.Forms.TableLayoutPanel
 $footer.Dock = [Windows.Forms.DockStyle]::Fill
 $footer.BackColor = [Drawing.Color]::Transparent
-$footer.Font = New-Object Drawing.Font('Segoe UI', 9)
-$footer.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
-$footer.ForeColor = [Drawing.Color]::FromArgb(155, 165, 180)
-$footer.Text = "Le mot de passe n’est jamais écrit dans le journal."
+$footer.ColumnCount = 2
+$footer.RowCount = 1
+[void]$footer.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeType]::Percent, 58)))
+[void]$footer.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeType]::Percent, 42)))
+
+$privacyNote = New-Object Windows.Forms.Label
+$privacyNote.Dock = [Windows.Forms.DockStyle]::Fill
+$privacyNote.BackColor = [Drawing.Color]::Transparent
+$privacyNote.Font = New-Object Drawing.Font('Segoe UI', 9)
+$privacyNote.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
+$privacyNote.ForeColor = [Drawing.Color]::FromArgb(155, 165, 180)
+$privacyNote.Text = "Le mot de passe n’est jamais écrit dans le journal."
+
+$authorLink = New-Object Windows.Forms.LinkLabel
+$authorLink.Dock = [Windows.Forms.DockStyle]::Fill
+$authorLink.BackColor = [Drawing.Color]::Transparent
+$authorLink.Font = New-Object Drawing.Font('Segoe UI', 9)
+$authorLink.TextAlign = [Drawing.ContentAlignment]::MiddleRight
+$authorLink.LinkColor = [Drawing.Color]::FromArgb(115, 170, 255)
+$authorLink.ActiveLinkColor = [Drawing.Color]::White
+$authorLink.VisitedLinkColor = [Drawing.Color]::FromArgb(115, 170, 255)
+$authorLink.LinkBehavior = [Windows.Forms.LinkBehavior]::HoverUnderline
+$authorLink.Text = 'Développé par Hery Nandrianina'
+$authorLink.Add_LinkClicked({
+        Start-Process -FilePath 'https://herynandrianina-portfolio.onrender.com/'
+    })
+$footer.Controls.Add($privacyNote, 0, 0)
+$footer.Controls.Add($authorLink, 1, 0)
 
 $layout.Controls.Add($header, 0, 0)
 $layout.Controls.Add($script:StateLabel, 0, 1)
