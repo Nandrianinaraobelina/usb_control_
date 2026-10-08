@@ -174,6 +174,7 @@ if /i not "%USB_VERIFY%"=="%USB_EXPECTED%" (
 echo.
 echo Stockage USB %ACTION_NAME% avec succès.
 call :LOG "%ACTION_NAME%" "SUCCES"
+if errorlevel 1 exit /b 1
 echo.
 pause
 exit /b 0
@@ -181,7 +182,7 @@ exit /b 0
 :LOG
 set "USB_LOG_ACTION=%~1"
 set "USB_LOG_RESULT=%~2"
-powershell -NoProfile -Command "$line = '{0}; action={1}; resultat={2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $env:USB_LOG_ACTION, $env:USB_LOG_RESULT; Add-Content -LiteralPath (Join-Path $env:USB_CONTROL_SCRIPT_DIR 'usb_control.log') -Value $line -Encoding utf8"
+powershell -NoProfile -Command "$ErrorActionPreference = 'Stop'; $line = '{0}; action={1}; resultat={2}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $env:USB_LOG_ACTION, $env:USB_LOG_RESULT; Add-Content -LiteralPath (Join-Path $env:USB_CONTROL_SCRIPT_DIR 'usb_control.log') -Value $line -Encoding utf8"
 if errorlevel 1 (
     echo Impossible d'ecrire dans le journal usb_control.log.
     exit /b 1
