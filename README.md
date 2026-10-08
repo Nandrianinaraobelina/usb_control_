@@ -9,24 +9,25 @@ verrouiller ou de déverrouiller l’accès aux périphériques de stockage USB.
 
 ## Utilisation
 
-1. Ouvrez `usb_control.bat` dans un éditeur de texte et remplacez `CHANGE_ME`
-   par le mot de passe de votre choix.
-2. Lancez le fichier en tant qu’administrateur : clic droit sur le fichier,
-   puis **Exécuter en tant qu’administrateur**.
+1. Dans les variables d’environnement Windows de votre compte, créez
+   `USB_CONTROL_PASSWORD` et attribuez-lui le mot de passe de votre choix.
+   Fermez puis rouvrez votre session ou votre terminal après l’avoir configuré.
+2. Lancez `usb_control.bat`. Le script demandera automatiquement l’autorisation
+   administrateur via Windows (UAC).
 3. Choisissez une option dans le menu :
    - `1` pour verrouiller le stockage USB ;
    - `2` pour le déverrouiller.
 4. Saisissez le mot de passe configuré.
 
-Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
-administrateur sont nécessaires pour appliquer cette modification.
+Le script modifie la valeur `Start` du service Windows `USBSTOR`. L’autorisation
+administrateur est nécessaire et sera demandée automatiquement.
 
 ## Remarques
 
 - Le verrouillage concerne les périphériques de stockage USB ; il ne désactive
   pas nécessairement les autres périphériques USB, comme les claviers ou les
   souris.
-- Le mot de passe est enregistré en clair dans le fichier `.bat`. Il constitue
-  une protection simple contre une utilisation accidentelle, pas une sécurité
-  contre une personne pouvant lire ou modifier le fichier.
+- Le mot de passe n’est pas stocké dans le fichier du projet. La variable
+  d’environnement Windows reste accessible à votre compte et ne remplace pas
+  une véritable protection contre un utilisateur ayant accès à cette session.
 - Pour rétablir le réglage précédent, choisissez l’option `2`.
