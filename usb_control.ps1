@@ -11,6 +11,7 @@ $script:LogPath = Join-Path $PSScriptRoot 'usb_control.log'
 $script:BackupPath = Join-Path $PSScriptRoot 'usb_control.previous'
 $script:Password = [Environment]::GetEnvironmentVariable('USB_CONTROL_PASSWORD')
 $script:MainForm = $null
+$script:BackgroundImage = $null
 $script:StateLabel = $null
 $script:DiskWarningLabel = $null
 $script:MessageLabel = $null
@@ -321,12 +322,16 @@ $script:MainForm.StartPosition = 'CenterScreen'
 $script:MainForm.ClientSize = New-Object Drawing.Size(850, 660)
 $script:MainForm.MinimumSize = New-Object Drawing.Size(760, 620)
 $script:MainForm.BackColor = [Drawing.Color]::FromArgb(17, 24, 39)
+$script:BackgroundImage = [Drawing.Image]::FromFile((Join-Path $PSScriptRoot 'usb-control-background.jpg'))
+$script:MainForm.BackgroundImage = $script:BackgroundImage
+$script:MainForm.BackgroundImageLayout = [Windows.Forms.ImageLayout]::Zoom
 $script:MainForm.ForeColor = [Drawing.Color]::White
 $script:MainForm.Font = New-Object Drawing.Font('Segoe UI', 12)
 $script:MainForm.AutoScaleMode = [Windows.Forms.AutoScaleMode]::Dpi
 
 $layout = New-Object Windows.Forms.TableLayoutPanel
 $layout.Dock = [Windows.Forms.DockStyle]::Fill
+$layout.BackColor = [Drawing.Color]::Transparent
 $layout.Padding = New-Object Windows.Forms.Padding(28, 22, 28, 22)
 $layout.ColumnCount = 1
 $layout.RowCount = 7
@@ -342,22 +347,26 @@ $layout.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.Si
 $header = New-Object Windows.Forms.Label
 $header.Text = 'CONTRÔLE DU STOCKAGE USB'
 $header.Dock = [Windows.Forms.DockStyle]::Fill
+$header.BackColor = [Drawing.Color]::Transparent
 $header.Font = New-Object Drawing.Font('Segoe UI Semibold', 21)
 $header.ForeColor = [Drawing.Color]::FromArgb(115, 170, 255)
 $header.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 
 $script:StateLabel = New-Object Windows.Forms.Label
 $script:StateLabel.Dock = [Windows.Forms.DockStyle]::Fill
+$script:StateLabel.BackColor = [Drawing.Color]::Transparent
 $script:StateLabel.Font = New-Object Drawing.Font('Segoe UI Semibold', 16)
 $script:StateLabel.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 
 $script:DiskWarningLabel = New-Object Windows.Forms.Label
 $script:DiskWarningLabel.Dock = [Windows.Forms.DockStyle]::Fill
+$script:DiskWarningLabel.BackColor = [Drawing.Color]::Transparent
 $script:DiskWarningLabel.Font = New-Object Drawing.Font('Segoe UI', 11)
 $script:DiskWarningLabel.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 
 $buttons = New-Object Windows.Forms.TableLayoutPanel
 $buttons.Dock = [Windows.Forms.DockStyle]::Fill
+$buttons.BackColor = [Drawing.Color]::Transparent
 $buttons.ColumnCount = 2
 $buttons.RowCount = 3
 [void]$buttons.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeType]::Percent, 50)))
@@ -380,6 +389,7 @@ $buttons.SetColumnSpan($buttons.GetControlFromPosition(0, 2), 2)
 
 $script:MessageLabel = New-Object Windows.Forms.Label
 $script:MessageLabel.Dock = [Windows.Forms.DockStyle]::Fill
+$script:MessageLabel.BackColor = [Drawing.Color]::Transparent
 $script:MessageLabel.Font = New-Object Drawing.Font('Segoe UI Semibold', 11)
 $script:MessageLabel.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 $script:MessageLabel.Text = 'Choisissez une action. Les opérations sensibles demandent confirmation.'
@@ -387,6 +397,7 @@ $script:MessageLabel.ForeColor = [Drawing.Color]::LightGray
 
 $footer = New-Object Windows.Forms.Label
 $footer.Dock = [Windows.Forms.DockStyle]::Fill
+$footer.BackColor = [Drawing.Color]::Transparent
 $footer.Font = New-Object Drawing.Font('Segoe UI', 9)
 $footer.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
 $footer.ForeColor = [Drawing.Color]::FromArgb(155, 165, 180)
@@ -401,4 +412,10 @@ $layout.Controls.Add($footer, 0, 5)
 $script:MainForm.Controls.Add($layout)
 
 $script:MainForm.Add_Shown({ [void](Update-Status) })
+$script:MainForm.Add_FormClosed({
+    if ($script:BackgroundImage) {
+        $script:MainForm.BackgroundImage = $null
+        $script:BackgroundImage.Dispose()
+    }
+})
 [void][Windows.Forms.Application]::Run($script:MainForm)
