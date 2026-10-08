@@ -1,33 +1,33 @@
-# Contrôle du stockage USB
+# Fifehezana ny fitahirizana USB
 
-Ce projet contient un seul script Windows, `usb_control.bat`, qui permet de
-verrouiller ou de déverrouiller l’accès aux périphériques de stockage USB.
+Ity tetikasa ity dia misy rakitra Windows iray, `usb_control.bat`, izay
+ahafahana manidy na manokatra indray ny fitaovana fitahirizana USB.
 
-## Aperçu
+## Sary
 
-![Menu du contrôle USB](usb-control-menu.png)
+![Menu fifehezana ny USB](usb-control-menu.png)
 
-## Utilisation
+## Fampiasana
 
-1. Dans les variables d’environnement Windows de votre compte, créez
-   `USB_CONTROL_PASSWORD` et attribuez-lui le mot de passe de votre choix.
-   Fermez puis rouvrez votre session ou votre terminal après l’avoir configuré.
-2. Lancez `usb_control.bat`. Le script demandera automatiquement l’autorisation
-   administrateur via Windows (UAC).
-3. Choisissez une option dans le menu :
-   - `1` pour verrouiller le stockage USB ;
-   - `2` pour le déverrouiller.
-4. Saisissez le mot de passe configuré.
+1. Mamoròna environment variable `USB_CONTROL_PASSWORD` ao amin'ny kaontinao
+   Windows, ary apetraho ao ny tenimiafina tianao hampiasaina.
+2. Akatòny ary sokafy indray ny terminal na ny session Windows mba hampiharana
+   ilay variable.
+3. Alefaso ny `usb_control.bat`. Hangataka ho azy ny alalana ho mpitantana
+   amin'ny alalan'ny Windows (UAC) ilay rakitra.
+4. Safidio ny safidy ao amin'ny menu:
+   - `1` hanidy ny fitahirizana USB;
+   - `2` hanokatra indray azy.
+5. Ampidiro ilay tenimiafina napetraka.
 
-Le script modifie la valeur `Start` du service Windows `USBSTOR`. L’autorisation
-administrateur est nécessaire et sera demandée automatiquement.
+Manova ny sanda `Start` an'ny service Windows `USBSTOR` ilay script. Ilaina ny
+alalana ho mpitantana, ary hangatahana ho azy izany.
 
-## Remarques
+## Fanamarihana
 
-- Le verrouillage concerne les périphériques de stockage USB ; il ne désactive
-  pas nécessairement les autres périphériques USB, comme les claviers ou les
-  souris.
-- Le mot de passe n’est pas stocké dans le fichier du projet. La variable
-  d’environnement Windows reste accessible à votre compte et ne remplace pas
-  une véritable protection contre un utilisateur ayant accès à cette session.
-- Pour rétablir le réglage précédent, choisissez l’option `2`.
+- Ny fitaovana fitahirizana USB ihany no voakasiky ny fanidiana; mety mbola
+  hiasa ny fitaovana USB hafa toy ny klavier sy ny souris.
+- Tsy voatahiry ao amin'ny rakitra tetikasa ny tenimiafina. Azo vakin'ny
+  kaontinao Windows ilay environment variable, ka tsy fiarovana amin'ny olona
+  afaka mampiasa io kaonty io izany.
+- Raha hanokatra indray ny fitahirizana USB, safidio ny `2`.
