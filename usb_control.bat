@@ -117,6 +117,14 @@ if "%USB_RESTORE%"=="1" (
     set "USB_EXPECTED=0x%USB_START%"
 )
 
+if /i "%USB_CURRENT%"=="%USB_EXPECTED%" (
+    echo.
+    echo Le stockage USB est déjà dans l'état demandé. Aucune modification du Registre n'est nécessaire.
+    call :LOG "%ACTION_NAME%" "DEJA_CONFIGURE"
+    pause
+    exit /b 0
+)
+
 echo.
 powershell -NoProfile -Command "$secure = Read-Host 'Saisissez le mot de passe' -AsSecureString; $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure); try { $entered = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer); if ($entered -cne $env:USB_CONTROL_PASSWORD) { exit 1 } } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }"
 if errorlevel 1 (

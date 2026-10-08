@@ -30,6 +30,7 @@ Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
 d’administrateur sont nécessaires et seront demandés automatiquement. Après
 la modification, le script relit la valeur du Registre afin de vérifier que le
 changement a bien été appliqué.
+Si le stockage est déjà dans l’état demandé, le script ne réécrit pas le Registre.
 
 Le script vérifie aussi les disques USB actuellement connectés. Ceux-ci peuvent
 rester accessibles après le verrouillage ; déconnectez-les puis reconnectez-les
