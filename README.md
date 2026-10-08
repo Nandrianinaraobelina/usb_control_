@@ -2,7 +2,8 @@
 
 Ce projet contient `usb_control.bat`, un lanceur qui ouvre une interface
 graphique Windows plus lisible. L’interface et ses fonctions sont définies dans
-`usb_control.ps1`.
+`usb_control.ps1`. La photo `usb-control-background.jpg` est utilisée en fond
+de l’application.
 
 ## Utilisation
 
