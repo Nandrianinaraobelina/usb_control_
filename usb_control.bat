@@ -2,7 +2,7 @@
 title USB Lock Security
 color 0A
 
-set "PASSWORD=CHANGE_ME"
+set "PASSWORD=Nandrianina"
 
 echo ==========================
 echo      USB PORT CONTROL
