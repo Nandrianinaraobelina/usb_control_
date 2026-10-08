@@ -15,16 +15,26 @@
         $script:StateLabel.ForeColor = [Drawing.Color]::Tomato
     }
 
-    $diskCount = Get-ConnectedUsbDiskCount
+    $disks = Get-ConnectedUsbDisks
+    $diskCount = if ($null -eq $disks) { $null } else { @($disks).Count }
+    $script:UsbDiskList.Items.Clear()
     if ($null -eq $diskCount) {
         $script:DiskWarningLabel.Text = 'Détection des disques USB indisponible.'
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::LightGray
     } elseif ($diskCount -gt 0) {
         $script:DiskWarningLabel.Text = "Attention : $diskCount disque(s) USB connecté(s). Ils peuvent rester accessibles après le verrouillage."
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::FromArgb(255, 190, 92)
+        foreach ($disk in $disks) {
+            $item = New-Object Windows.Forms.ListViewItem($disk.Model)
+            [void]$item.SubItems.Add($disk.Capacity)
+            [void]$item.SubItems.Add($disk.DriveLetter)
+            [void]$script:UsbDiskList.Items.Add($item)
+        }
     } else {
         $script:DiskWarningLabel.Text = 'Aucun disque USB connecté détecté.'
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::FromArgb(91, 220, 160)
+        $item = New-Object Windows.Forms.ListViewItem('Aucun disque USB connecté')
+        [void]$script:UsbDiskList.Items.Add($item)
     }
 
     return $state
@@ -83,7 +93,8 @@ function Invoke-UsbAction {
     }
 
     if ($Action -eq 'Lock') {
-        $diskCount = Get-ConnectedUsbDiskCount
+        $disks = Get-ConnectedUsbDisks
+        $diskCount = if ($null -eq $disks) { $null } else { @($disks).Count }
         if ($null -eq $diskCount) {
             $choice = [Windows.Forms.MessageBox]::Show(
                 $script:MainForm,

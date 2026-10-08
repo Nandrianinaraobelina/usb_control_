@@ -18,6 +18,7 @@ $script:BackgroundImage = $null
 $script:StateLabel = $null
 $script:DiskWarningLabel = $null
 $script:MessageLabel = $null
+$script:UsbDiskList = $null
 
 . (Join-Path $PSScriptRoot 'Modules\Storage.ps1')
 . (Join-Path $PSScriptRoot 'Modules\Dialogs.ps1')
@@ -36,8 +37,8 @@ if ([string]::IsNullOrWhiteSpace($script:Password)) {
 $script:MainForm = New-Object Windows.Forms.Form
 $script:MainForm.Text = 'Contrôle du stockage USB'
 $script:MainForm.StartPosition = 'CenterScreen'
-$script:MainForm.ClientSize = New-Object Drawing.Size(850, 660)
-$script:MainForm.MinimumSize = New-Object Drawing.Size(760, 620)
+$script:MainForm.ClientSize = New-Object Drawing.Size(900, 780)
+$script:MainForm.MinimumSize = New-Object Drawing.Size(800, 700)
 $script:MainForm.BackColor = [Drawing.Color]::FromArgb(17, 24, 39)
 $script:BackgroundImage = [Drawing.Image]::FromFile((Join-Path $script:ProjectRoot 'assets\usb-control-background.jpg'))
 $script:MainForm.BackgroundImage = $script:BackgroundImage
@@ -53,11 +54,11 @@ $layout.Padding = New-Object Windows.Forms.Padding(28, 22, 28, 22)
 $layout.ColumnCount = 1
 $layout.RowCount = 7
 $layout.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeType]::Percent, 100)))
-[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 62)))
-[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 72)))
-[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 84)))
-[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Percent, 100)))
+[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 58)))
 [void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 64)))
+[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 52)))
+[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 138)))
+[void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Percent, 100)))
 [void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 54)))
 [void]$layout.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Absolute, 36)))
 
@@ -80,6 +81,17 @@ $script:DiskWarningLabel.Dock = [Windows.Forms.DockStyle]::Fill
 $script:DiskWarningLabel.BackColor = [Drawing.Color]::Transparent
 $script:DiskWarningLabel.Font = New-Object Drawing.Font('Segoe UI', 11)
 $script:DiskWarningLabel.TextAlign = [Drawing.ContentAlignment]::MiddleLeft
+
+$script:UsbDiskList = New-Object Windows.Forms.ListView
+$script:UsbDiskList.Dock = [Windows.Forms.DockStyle]::Fill
+$script:UsbDiskList.View = [Windows.Forms.View]::Details
+$script:UsbDiskList.FullRowSelect = $true
+$script:UsbDiskList.GridLines = $true
+$script:UsbDiskList.BackColor = [Drawing.Color]::FromArgb(25, 34, 49)
+$script:UsbDiskList.ForeColor = [Drawing.Color]::White
+[void]$script:UsbDiskList.Columns.Add('Modèle', 420)
+[void]$script:UsbDiskList.Columns.Add('Capacité', 140)
+[void]$script:UsbDiskList.Columns.Add('Lettre de lecteur', 180)
 
 $buttons = New-Object Windows.Forms.TableLayoutPanel
 $buttons.Dock = [Windows.Forms.DockStyle]::Fill
@@ -123,9 +135,10 @@ $footer.Text = "Le mot de passe n’est jamais écrit dans le journal."
 $layout.Controls.Add($header, 0, 0)
 $layout.Controls.Add($script:StateLabel, 0, 1)
 $layout.Controls.Add($script:DiskWarningLabel, 0, 2)
-$layout.Controls.Add($buttons, 0, 3)
-$layout.Controls.Add($script:MessageLabel, 0, 4)
-$layout.Controls.Add($footer, 0, 5)
+$layout.Controls.Add($script:UsbDiskList, 0, 3)
+$layout.Controls.Add($buttons, 0, 4)
+$layout.Controls.Add($script:MessageLabel, 0, 5)
+$layout.Controls.Add($footer, 0, 6)
 $script:MainForm.Controls.Add($layout)
 
 $script:MainForm.Add_Shown({ [void](Update-Status) })

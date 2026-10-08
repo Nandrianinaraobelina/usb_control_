@@ -42,7 +42,8 @@ La photo d’arrière-plan de l’application est `assets/usb-control-background
    variable soit prise en compte.
 3. Lancez `usb_control.bat`. Windows demandera automatiquement l’autorisation
    d’administrateur via l’UAC. Seule l’interface administrateur reste ouverte.
-4. Consultez l’état du stockage USB et utilisez les boutons pour verrouiller,
+4. Consultez l’état du stockage USB et la liste des disques connectés, avec leur
+   modèle, capacité et lettre de lecteur. Utilisez les boutons pour verrouiller,
    déverrouiller, restaurer la valeur initiale, ouvrir le journal ou quitter.
 5. Saisissez le mot de passe dans la boîte de dialogue. La saisie est masquée.
 6. Vérifiez le récapitulatif et confirmez les modifications du Registre.
