@@ -18,7 +18,8 @@ verrouiller ou de déverrouiller les périphériques de stockage USB.
    affichera un message explicite.
 4. Consultez l’état actuel affiché, puis choisissez une option dans le menu :
    - `1` pour verrouiller le stockage USB ;
-   - `2` pour le déverrouiller.
+   - `2` pour le déverrouiller ;
+   - `3` pour quitter.
 5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
 6. Tapez `OUI` pour confirmer la modification du Registre Windows.
 

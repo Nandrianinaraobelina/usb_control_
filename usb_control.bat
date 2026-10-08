@@ -49,9 +49,11 @@ if /i "%USB_CURRENT%"=="0x4" (
 echo.
 echo 1. Verrouiller le stockage USB
 echo 2. Déverrouiller le stockage USB
+echo 3. Quitter
 echo.
-set /p ACTION=Choisissez une option (1 ou 2) :
+set /p ACTION=Choisissez une option (1, 2 ou 3) :
 
+if "%ACTION%"=="3" exit /b 0
 if "%ACTION%"=="1" (
     rem La valeur 4 désactive le service USBSTOR.
     set "USB_START=4"
