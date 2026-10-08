@@ -71,11 +71,22 @@ echo.
 echo 1. Verrouiller le stockage USB
 echo 2. Déverrouiller le stockage USB
 echo 3. Restaurer la valeur initiale du Registre
-echo 4. Quitter
+echo 4. Ouvrir le journal des opérations
+echo 5. Quitter
 echo.
-set /p ACTION=Choisissez une option (1, 2, 3 ou 4) :
+set /p ACTION=Choisissez une option (1, 2, 3, 4 ou 5) :
 
-if "%ACTION%"=="4" exit /b 0
+if "%ACTION%"=="5" exit /b 0
+if "%ACTION%"=="4" (
+    if exist "%USB_CONTROL_SCRIPT_DIR%usb_control.log" (
+        start "" notepad.exe "%USB_CONTROL_SCRIPT_DIR%usb_control.log"
+    ) else (
+        echo.
+        echo Le journal des opérations n'existe pas encore.
+        pause
+    )
+    exit /b 0
+)
 set "USB_RESTORE=0"
 if "%ACTION%"=="1" (
     rem La valeur 4 désactive le service USBSTOR.

@@ -21,7 +21,8 @@ Le script configure la console en UTF-8 pour afficher correctement les accents.
    - `1` pour verrouiller le stockage USB ;
    - `2` pour le déverrouiller ;
    - `3` pour restaurer la valeur initiale du Registre ;
-   - `4` pour quitter.
+   - `4` pour ouvrir le journal des opérations ;
+   - `5` pour quitter.
 5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
 6. Vérifiez le récapitulatif de l’état actuel et de l’action demandée, puis
    tapez `OUI` pour confirmer la modification du Registre Windows.
