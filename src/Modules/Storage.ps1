@@ -8,6 +8,48 @@
     Add-Content -LiteralPath $script:LogPath -Value $entry -Encoding UTF8 -ErrorAction Stop
 }
 
+function Get-OperationLogEntries {
+    if (-not (Test-Path -LiteralPath $script:LogPath -PathType Leaf)) {
+        return @()
+    }
+
+    $entries = New-Object 'System.Collections.Generic.List[object]'
+    $lineNumber = 0
+    foreach ($line in Get-Content -LiteralPath $script:LogPath -Encoding UTF8 -ErrorAction Stop) {
+        $lineNumber++
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+
+        if ($line -notmatch '^(?<Date>[^;]+);\s*action=(?<Action>[^;]*);\s*resultat=(?<Result>.*)$') {
+            throw "Ligne $lineNumber invalide dans le journal des opérations."
+        }
+
+        $entries.Add([pscustomobject]@{
+                Date   = $Matches.Date.Trim()
+                Action = $Matches.Action.Trim()
+                Result = $Matches.Result.Trim()
+            })
+    }
+
+    return $entries.ToArray()
+}
+
+function Export-OperationLogCsv {
+    param(
+        [Parameter(Mandatory)][string]$Path
+    )
+
+    $entries = @(Get-OperationLogEntries)
+    if ($entries.Count -gt 0) {
+        $csv = $entries | ConvertTo-Csv -NoTypeInformation
+    } else {
+        $csv = '"Date","Action","Result"'
+    }
+
+    Set-Content -LiteralPath $Path -Value $csv -Encoding UTF8 -ErrorAction Stop
+}
+
 function Get-UsbState {
     $value = [uint32](Get-ItemPropertyValue -LiteralPath $script:RegistryPath -Name Start -ErrorAction Stop)
     [pscustomobject]@{
@@ -35,10 +77,10 @@ function Get-ConnectedUsbDisks {
             )
 
             $inventory.Add([pscustomobject]@{
-                Model       = if ([string]::IsNullOrWhiteSpace($disk.Model)) { 'Modèle inconnu' } else { $disk.Model.Trim() }
-                Capacity    = if ($disk.Size) { '{0:N1} Go' -f ($disk.Size / 1GB) } else { 'Inconnue' }
-                DriveLetter = if ($driveLetters.Count -gt 0) { $driveLetters -join ', ' } else { 'Aucune lettre' }
-            })
+                    Model       = if ([string]::IsNullOrWhiteSpace($disk.Model)) { 'Modèle inconnu' } else { $disk.Model.Trim() }
+                    Capacity    = if ($disk.Size) { '{0:N1} Go' -f ($disk.Size / 1GB) } else { 'Inconnue' }
+                    DriveLetter = if ($driveLetters.Count -gt 0) { $driveLetters -join ', ' } else { 'Aucune lettre' }
+                })
         }
 
         return ,$inventory.ToArray()

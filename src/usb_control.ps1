@@ -110,11 +110,7 @@ $script:RestoreButton = New-ActionButton 'Restaurer la valeur initiale' ([Drawin
 $script:RestoreButton.Enabled = $false
 $buttons.Controls.Add($script:RestoreButton, 0, 1)
 $buttons.Controls.Add((New-ActionButton 'Ouvrir le journal des opérations' ([Drawing.Color]::FromArgb(55, 105, 170)) {
-            if (Test-Path -LiteralPath $script:LogPath -PathType Leaf) {
-                Start-Process -FilePath notepad.exe -ArgumentList ('"{0}"' -f $script:LogPath)
-            } else {
-                Show-Message -Text "Le journal des opérations n’existe pas encore." -Icon Warning
-            }
+            Show-OperationLogDialog
         }), 1, 1)
 $buttons.Controls.Add((New-ActionButton 'Actualiser' ([Drawing.Color]::FromArgb(55, 105, 170)) {
             $state = Update-Status

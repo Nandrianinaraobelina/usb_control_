@@ -64,7 +64,8 @@ lecture seule afin d’éviter une modification accidentelle. L’option de
 restauration remet cette valeur.
 
 Le journal des opérations est enregistré dans `data/usb_control.log`. Il indique
-la date, l’action et le résultat, sans jamais contenir le mot de passe.
+la date, l’action et le résultat, sans jamais contenir le mot de passe. Le bouton
+du journal ouvre son historique dans l’application et permet de l’exporter en CSV.
 
 ## Remarques
 
