@@ -25,7 +25,9 @@ ahafahana manidy na manokatra indray ny fitaovana fitahirizana USB.
 6. Soraty `ENY` raha hanamafy ny fanovana ao amin'ny rejisitra Windows.
 
 Manova ny sanda `Start` an'ny service Windows `USBSTOR` ilay script. Ilaina ny
-alalana ho mpitantana, ary hangatahana ho azy izany.
+alalana ho mpitantana, ary hangatahana ho azy izany. Aorian'ny fanovana dia
+hamerina hamaky ny sanda ao amin'ny rejisitra ilay script mba hanamarinana fa
+voaray ny fanovana.
 
 ## Fanamarihana
 

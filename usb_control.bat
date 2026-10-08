@@ -89,7 +89,17 @@ rem Ovay ny fikirakirana USBSTOR ao amin'ny rejisitra Windows.
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start /t REG_DWORD /d %USB_START% /f >nul
 if errorlevel 1 (
     echo.
-    echo Pups .. hamarino tsara lou ee.
+    echo Tsy nahomby ny fanoratana ny sanda ao amin'ny rejisitra Windows.
+    pause
+    exit /b 1
+)
+
+rem Hamarino fa voasoratra marina ny sanda nangatahana.
+set "USB_VERIFY="
+for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_VERIFY=%%A"
+if /i not "%USB_VERIFY%"=="0x%USB_START%" (
+    echo.
+    echo Tsy voamarina ny fanovana. Sanda andrasana: 0x%USB_START%; sanda hita: %USB_VERIFY%.
     pause
     exit /b 1
 )
