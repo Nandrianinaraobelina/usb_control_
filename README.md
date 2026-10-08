@@ -36,7 +36,8 @@ Si le stockage est déjà dans l’état demandé, le script ne réécrit pas le
 Le script vérifie aussi les disques USB actuellement connectés. Ceux-ci peuvent
 rester accessibles après le verrouillage ; déconnectez-les puis reconnectez-les
 après l’opération. Si Windows ne permet pas de vérifier leur présence, le
-script l’indique.
+script l’indique. Avant de verrouiller avec un disque connecté, il demande une
+confirmation supplémentaire ; vous pouvez annuler pour le déconnecter d’abord.
 
 Avant le premier verrouillage ou déverrouillage, la valeur initiale de `Start`
 est enregistrée dans `usb_control.previous`, à côté du script. L’option `3`

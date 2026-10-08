@@ -136,6 +136,19 @@ if /i "%USB_CURRENT%"=="%USB_EXPECTED%" (
     exit /b 0
 )
 
+if "%ACTION%"=="1" if defined USB_CONNECTED_COUNT if %USB_CONNECTED_COUNT% GTR 0 (
+    echo.
+    echo ATTENTION : un ou plusieurs disques USB sont connectes et peuvent rester accessibles apres le verrouillage.
+    echo Deconnectez-les avant de continuer si vous souhaitez bloquer leur acces.
+    set /p USB_LOCK_CONFIRM=Continuer malgre cet avertissement ? Tapez OUI :
+    if /i not "!USB_LOCK_CONFIRM!"=="OUI" (
+        echo Verrouillage annule.
+        call :LOG "%ACTION_NAME%" "ANNULATION_DISQUE_CONNECTE"
+        pause
+        exit /b 0
+    )
+)
+
 echo.
 powershell -NoProfile -Command "$secure = Read-Host 'Saisissez le mot de passe' -AsSecureString; $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure); try { $entered = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer); if ($entered -cne $env:USB_CONTROL_PASSWORD) { exit 1 } } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }"
 if errorlevel 1 (
