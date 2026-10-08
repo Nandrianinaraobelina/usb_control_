@@ -42,14 +42,20 @@ La photo d’arrière-plan de l’application est `assets/usb-control-background
    variable soit prise en compte.
 3. Lancez `usb_control.bat`. Windows demandera automatiquement l’autorisation
    d’administrateur via l’UAC. Seule l’interface administrateur reste ouverte.
-4. Consultez l’état du stockage USB et utilisez les boutons pour verrouiller,
-   déverrouiller, restaurer la valeur initiale, ouvrir le journal ou quitter.
+4. Consultez l’état du stockage USB et la liste des disques connectés, avec leur
+   modèle, capacité et lettre de lecteur. Utilisez **Actualiser** pour relire
+   l’état et la liste, ou les boutons pour verrouiller, déverrouiller, restaurer
+   la valeur initiale, ouvrir le journal ou quitter.
+   Le bouton de restauration reste désactivé tant que la sauvegarde initiale
+   n’existe pas et affiche sa valeur lorsqu’elle est disponible.
 5. Saisissez le mot de passe dans la boîte de dialogue. La saisie est masquée.
 6. Vérifiez le récapitulatif et confirmez les modifications du Registre.
 
 Le script modifie la valeur `Start` du service Windows `USBSTOR`, puis vérifie
 que la modification a bien été appliquée. Si le stockage est déjà dans l’état
 demandé, le Registre n’est pas réécrit.
+Après une modification réussie, si le changement USB ne prend pas effet,
+débranchez puis rebranchez le périphérique ou redémarrez Windows.
 
 Les disques USB déjà connectés peuvent rester accessibles après le verrouillage.
 Le script affiche un avertissement et demande confirmation avant de continuer.
@@ -60,7 +66,8 @@ lecture seule afin d’éviter une modification accidentelle. L’option de
 restauration remet cette valeur.
 
 Le journal des opérations est enregistré dans `data/usb_control.log`. Il indique
-la date, l’action et le résultat, sans jamais contenir le mot de passe.
+la date, l’action et le résultat, sans jamais contenir le mot de passe. Le bouton
+du journal ouvre son historique dans l’application et permet de l’exporter en CSV.
 
 ## Remarques
 

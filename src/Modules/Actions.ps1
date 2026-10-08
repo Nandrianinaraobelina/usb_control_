@@ -1,4 +1,20 @@
 ﻿function Update-Status {
+    $script:RestoreButton.Enabled = Test-Path -LiteralPath $script:BackupPath -PathType Leaf
+    $script:RestoreButton.Text = 'Restaurer la valeur initiale'
+    if ($script:RestoreButton.Enabled) {
+        try {
+            $backupText = (Get-Content -LiteralPath $script:BackupPath -Raw -ErrorAction Stop).Trim()
+            $backupValue = [uint32]0
+            if ([uint32]::TryParse($backupText, [ref]$backupValue)) {
+                $script:RestoreButton.Text = 'Restaurer la valeur initiale (0x{0:X})' -f $backupValue
+            } else {
+                $script:RestoreButton.Text = 'Restaurer la valeur initiale (sauvegarde invalide)'
+            }
+        } catch {
+            $script:RestoreButton.Text = 'Restaurer la valeur initiale (lecture impossible)'
+        }
+    }
+
     try {
         $state = Get-UsbState
         $script:StateLabel.Text = "État actuel : $($state.Text)  ($($state.Hex))"
@@ -15,16 +31,26 @@
         $script:StateLabel.ForeColor = [Drawing.Color]::Tomato
     }
 
-    $diskCount = Get-ConnectedUsbDiskCount
+    $disks = Get-ConnectedUsbDisks
+    $diskCount = if ($null -eq $disks) { $null } else { @($disks).Count }
+    $script:UsbDiskList.Items.Clear()
     if ($null -eq $diskCount) {
         $script:DiskWarningLabel.Text = 'Détection des disques USB indisponible.'
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::LightGray
     } elseif ($diskCount -gt 0) {
         $script:DiskWarningLabel.Text = "Attention : $diskCount disque(s) USB connecté(s). Ils peuvent rester accessibles après le verrouillage."
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::FromArgb(255, 190, 92)
+        foreach ($disk in $disks) {
+            $item = New-Object Windows.Forms.ListViewItem($disk.Model)
+            [void]$item.SubItems.Add($disk.Capacity)
+            [void]$item.SubItems.Add($disk.DriveLetter)
+            [void]$script:UsbDiskList.Items.Add($item)
+        }
     } else {
         $script:DiskWarningLabel.Text = 'Aucun disque USB connecté détecté.'
         $script:DiskWarningLabel.ForeColor = [Drawing.Color]::FromArgb(91, 220, 160)
+        $item = New-Object Windows.Forms.ListViewItem('Aucun disque USB connecté')
+        [void]$script:UsbDiskList.Items.Add($item)
     }
 
     return $state
@@ -83,7 +109,8 @@ function Invoke-UsbAction {
     }
 
     if ($Action -eq 'Lock') {
-        $diskCount = Get-ConnectedUsbDiskCount
+        $disks = Get-ConnectedUsbDisks
+        $diskCount = if ($null -eq $disks) { $null } else { @($disks).Count }
         if ($null -eq $diskCount) {
             $choice = [Windows.Forms.MessageBox]::Show(
                 $script:MainForm,
@@ -163,7 +190,7 @@ function Invoke-UsbAction {
 
     try {
         Write-OperationLog -Action $actionName -Result 'SUCCES'
-        $script:MessageLabel.Text = "Opération réussie : $actionName."
+        $script:MessageLabel.Text = "Succès : $actionName. Si besoin, débranchez/rebranchez le périphérique ou redémarrez Windows."
         $script:MessageLabel.ForeColor = [Drawing.Color]::FromArgb(91, 220, 160)
     } catch {
         Show-Message -Text "La modification a réussi, mais le journal n’a pas pu être écrit : $($_.Exception.Message)" -Icon Error
