@@ -8,12 +8,17 @@ graphique Windows. L’interface et la logique de contrôle sont dans
 
 ```text
 usb_control.bat                 Lanceur Windows
-src/usb_control.ps1             Interface et logique de contrôle
+src/usb_control.ps1             Point d’entrée et assemblage de l’interface
+src/Modules/Actions.ps1          Opérations USB et confirmations
+src/Modules/Dialogs.ps1          Fenêtres, saisie masquée et boutons
+src/Modules/Storage.ps1          Registre, disques USB et journal
 assets/                          Images de l’application et documentation
 data/                            Journal et sauvegarde locale du Registre
 .gitignore                       Exclut les données locales générées
 README.md                        Documentation
 ```
+
+Le script principal charge les modules de `src/Modules/` au démarrage.
 
 ## Aperçu
 
