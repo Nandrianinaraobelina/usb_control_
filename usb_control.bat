@@ -35,6 +35,10 @@ rem Lit l'état actuel du service USBSTOR dans le registre.
 set "USB_CURRENT="
 for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_CURRENT=%%A"
 
+rem Compte les disques USB actuellement connectés.
+set "USB_CONNECTED_COUNT="
+for /f %%A in ('powershell -NoProfile -Command "(Get-CimInstance Win32_DiskDrive | Where-Object InterfaceType -eq USB | Measure-Object).Count" 2^>nul') do set "USB_CONNECTED_COUNT=%%A"
+
 echo ==========================
 echo      CONTRÔLE DU STOCKAGE USB
 echo ==========================
@@ -47,6 +51,18 @@ if /i "%USB_CURRENT%"=="0x4" (
     echo État actuel : INCONNU ^(%USB_CURRENT%^)
 ) else (
     echo État actuel : INDISPONIBLE
+)
+if defined USB_CONNECTED_COUNT (
+    if %USB_CONNECTED_COUNT% GTR 0 (
+        echo Attention : des disques de stockage USB sont actuellement connectés.
+        echo Nombre détecté : %USB_CONNECTED_COUNT%.
+        echo Ils peuvent rester accessibles après le verrouillage.
+        echo Déconnectez-les puis reconnectez-les après l'opération.
+    ) else (
+        echo Aucun disque USB connecté détecté.
+    )
+) else (
+    echo Impossible de vérifier les disques USB connectés.
 )
 echo.
 echo 1. Verrouiller le stockage USB

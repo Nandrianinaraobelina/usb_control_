@@ -28,6 +28,11 @@ d’administrateur sont nécessaires et seront demandés automatiquement. Après
 la modification, le script relit la valeur du Registre afin de vérifier que le
 changement a bien été appliqué.
 
+Le script vérifie aussi les disques USB actuellement connectés. Ceux-ci peuvent
+rester accessibles après le verrouillage ; déconnectez-les puis reconnectez-les
+après l’opération. Si Windows ne permet pas de vérifier leur présence, le
+script l’indique.
+
 Les opérations et leurs résultats sont ajoutés à `usb_control.log`, à côté du
 script. Le journal contient la date, l’action et le résultat, jamais le mot de
 passe.
