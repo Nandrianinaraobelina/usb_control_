@@ -21,6 +21,7 @@ ahafahana manidy na manokatra indray ny fitaovana fitahirizana USB.
    - `2` hanokatra indray azy.
 5. Ampidiro ilay tenimiafina napetraka. Tsy hiseho eo amin'ny efijery ny
    soratra rehefa manoratra azy ianao.
+6. Soraty `ENY` raha hanamafy ny fanovana ao amin'ny rejisitra Windows.
 
 Manova ny sanda `Start` an'ny service Windows `USBSTOR` ilay script. Ilaina ny
 alalana ho mpitantana, ary hangatahana ho azy izany.

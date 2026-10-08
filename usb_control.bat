@@ -71,6 +71,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
+echo.
+set /p CONFIRM=Hanohy ve? Soraty ENY hanamafisana:
+if /i not "%CONFIRM%"=="ENY" (
+    echo.
+    echo Nofoanana ny fanovana.
+    pause
+    exit /b 0
+)
+
 rem Ovay ny fikirakirana USBSTOR ao amin'ny rejisitra Windows.
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start /t REG_DWORD /d %USB_START% /f >nul
 if errorlevel 1 (
