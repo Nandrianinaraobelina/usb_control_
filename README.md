@@ -22,7 +22,8 @@ verrouiller ou de déverrouiller les périphériques de stockage USB.
    - `3` pour restaurer la valeur initiale du Registre ;
    - `4` pour quitter.
 5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
-6. Tapez `OUI` pour confirmer la modification du Registre Windows.
+6. Vérifiez le récapitulatif de l’état actuel et de l’action demandée, puis
+   tapez `OUI` pour confirmer la modification du Registre Windows.
 
 Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
 d’administrateur sont nécessaires et seront demandés automatiquement. Après

@@ -125,7 +125,12 @@ if errorlevel 1 (
 )
 
 echo.
-set /p CONFIRM=Confirmez-vous la modification ? Tapez OUI :
+echo Récapitulatif avant modification :
+echo État actuel dans le Registre : %USB_CURRENT%
+echo Action demandée : %ACTION_NAME%
+echo Valeur Start demandée : %USB_EXPECTED%
+echo.
+set /p CONFIRM=Confirmez-vous cette modification ? Tapez OUI :
 if /i not "%CONFIRM%"=="OUI" (
     echo.
     echo Modification annulée.
