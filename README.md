@@ -15,7 +15,8 @@ ahafahana manidy na manokatra indray ny fitaovana fitahirizana USB.
    ilay variable.
 3. Alefaso ny `usb_control.bat`. Hangataka ho azy ny alalana ho mpitantana
    amin'ny alalan'ny Windows (UAC) ilay rakitra.
-4. Safidio ny safidy ao amin'ny menu:
+4. Jereo aloha ny sata ankehitriny asehon'ny script. Avy eo safidio ny safidy
+   ao amin'ny menu:
    - `1` hanidy ny fitahirizana USB;
    - `2` hanokatra indray azy.
 5. Ampidiro ilay tenimiafina napetraka. Tsy hiseho eo amin'ny efijery ny

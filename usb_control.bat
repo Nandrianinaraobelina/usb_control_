@@ -24,9 +24,23 @@ if not defined USB_CONTROL_PASSWORD (
     exit /b 1
 )
 
+rem Vakio ny sata USBSTOR ankehitriny ao amin'ny rejisitra.
+set "USB_CURRENT="
+for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_CURRENT=%%A"
+
 echo ==========================
 echo      FIFEHEZANA NY USB
 echo ==========================
+echo.
+if /i "%USB_CURRENT%"=="0x4" (
+    echo Sata ankehitriny: MIHIDY
+) else if /i "%USB_CURRENT%"=="0x3" (
+    echo Sata ankehitriny: MISOKATRA
+) else if defined USB_CURRENT (
+    echo Sata ankehitriny: TSY FANTATRA ^(%USB_CURRENT%^)
+) else (
+    echo Sata ankehitriny: TSY AZO
+)
 echo.
 echo 1. RAHA HIDINA ILAY USB
 echo 2. RAHA HO SOKAFANA ILAY USB
