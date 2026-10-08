@@ -31,7 +31,7 @@ echo.
 echo 1. RAHA HIDINA ILAY USB
 echo 2. RAHA HO SOKAFANA ILAY USB
 echo.
-set /p ACTION=Misafidiana (1 na 2): 
+set /p ACTION=Misafidiana (1 na 2):
 
 if "%ACTION%"=="1" (
     rem Ny sanda 4 dia manakana ny USBSTOR.
@@ -49,7 +49,7 @@ if "%ACTION%"=="1" (
 )
 
 echo.
-set /p INPUT=Ampidiro ny tenimiafina: 
+set /p INPUT=Ampidiro ny tenimiafina:
 
 if not "%INPUT%"=="%USB_CONTROL_PASSWORD%" (
     echo.
