@@ -33,10 +33,10 @@ set /p ACTION=Choose an option (1 or 2):
 
 if "%ACTION%"=="1" (
     set "USB_START=4"
-    set "ACTION_NAME=Locked"
+    set "ACTION_NAME=MIHIDY"
 ) else if "%ACTION%"=="2" (
     set "USB_START=3"
-    set "ACTION_NAME=Unlocked"
+    set "ACTION_NAME=MISOKATRA"
 ) else (
     echo.
     echo Invalid option.
