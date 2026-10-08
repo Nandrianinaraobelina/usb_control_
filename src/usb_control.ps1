@@ -95,12 +95,12 @@ $buttons.Controls.Add((New-ActionButton 'Verrouiller le stockage USB' ([Drawing.
 $buttons.Controls.Add((New-ActionButton 'Déverrouiller le stockage USB' ([Drawing.Color]::FromArgb(35, 135, 100)) { Invoke-UsbAction -Action Unlock }), 1, 0)
 $buttons.Controls.Add((New-ActionButton 'Restaurer la valeur initiale' ([Drawing.Color]::FromArgb(80, 95, 125)) { Invoke-UsbAction -Action Restore }), 0, 1)
 $buttons.Controls.Add((New-ActionButton 'Ouvrir le journal des opérations' ([Drawing.Color]::FromArgb(55, 105, 170)) {
-    if (Test-Path -LiteralPath $script:LogPath -PathType Leaf) {
-        Start-Process -FilePath notepad.exe -ArgumentList ('"{0}"' -f $script:LogPath)
-    } else {
-        Show-Message -Text "Le journal des opérations n’existe pas encore." -Icon Warning
-    }
-}), 1, 1)
+            if (Test-Path -LiteralPath $script:LogPath -PathType Leaf) {
+                Start-Process -FilePath notepad.exe -ArgumentList ('"{0}"' -f $script:LogPath)
+            } else {
+                Show-Message -Text "Le journal des opérations n’existe pas encore." -Icon Warning
+            }
+        }), 1, 1)
 $buttons.Controls.Add((New-ActionButton 'Quitter' ([Drawing.Color]::FromArgb(75, 82, 96)) { $script:MainForm.Close() }), 0, 2)
 $buttons.SetColumnSpan($buttons.GetControlFromPosition(0, 2), 2)
 
@@ -130,9 +130,9 @@ $script:MainForm.Controls.Add($layout)
 
 $script:MainForm.Add_Shown({ [void](Update-Status) })
 $script:MainForm.Add_FormClosed({
-    if ($script:BackgroundImage) {
-        $script:MainForm.BackgroundImage = $null
-        $script:BackgroundImage.Dispose()
-    }
-})
+        if ($script:BackgroundImage) {
+            $script:MainForm.BackgroundImage = $null
+            $script:BackgroundImage.Dispose()
+        }
+    })
 [void][Windows.Forms.Application]::Run($script:MainForm)

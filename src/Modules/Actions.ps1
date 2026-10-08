@@ -1,4 +1,4 @@
-function Update-Status {
+﻿function Update-Status {
     try {
         $state = Get-UsbState
         $script:StateLabel.Text = "État actuel : $($state.Text)  ($($state.Hex))"

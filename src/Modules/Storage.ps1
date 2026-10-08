@@ -1,4 +1,4 @@
-function Write-OperationLog {
+﻿function Write-OperationLog {
     param(
         [Parameter(Mandatory)][string]$Action,
         [Parameter(Mandatory)][string]$Result
@@ -12,8 +12,8 @@ function Get-UsbState {
     $value = [uint32](Get-ItemPropertyValue -LiteralPath $script:RegistryPath -Name Start -ErrorAction Stop)
     [pscustomobject]@{
         Value = $value
-        Hex = '0x{0:X}' -f $value
-        Text = switch ($value) {
+        Hex   = '0x{0:X}' -f $value
+        Text  = switch ($value) {
             4 { 'VERROUILLÉ' }
             3 { 'DÉVERROUILLÉ' }
             default { 'ÉTAT INCONNU' }
