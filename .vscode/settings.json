@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "ms-vscode.powershell",
     "editor.formatOnSave": true
   },
-  "powershell.codeFormatting.preset": "Allman",
+  "powershell.codeFormatting.preset": "OTBS",
   "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
   "powershell.codeFormatting.useCorrectCasing": true
 }
