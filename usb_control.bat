@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001 >nul
 title Contrôle du stockage USB
 color 0A
@@ -9,10 +10,10 @@ if errorlevel 1 (
     rem Relance le script avec l'élévation UAC si nécessaire.
     set "USB_CONTROL_SCRIPT=%~f0"
     powershell -NoProfile -Command "try { Start-Process -FilePath $env:USB_CONTROL_SCRIPT -Verb RunAs -ErrorAction Stop; exit 0 } catch { if ($_.Exception.NativeErrorCode -eq 1223) { exit 1223 }; exit 1 }"
-    set "UAC_RESULT=%ERRORLEVEL%"
-    if not "%UAC_RESULT%"=="0" (
+    set "UAC_RESULT=!ERRORLEVEL!"
+    if not "!UAC_RESULT!"=="0" (
         echo.
-        if "%UAC_RESULT%"=="1223" (
+        if "!UAC_RESULT!"=="1223" (
             echo Vous avez annulé la demande d'autorisation administrateur.
         ) else (
             echo Impossible de relancer le script avec les droits administrateur.
