@@ -113,8 +113,14 @@ $buttons.Controls.Add((New-ActionButton 'Ouvrir le journal des opérations' ([Dr
                 Show-Message -Text "Le journal des opérations n’existe pas encore." -Icon Warning
             }
         }), 1, 1)
-$buttons.Controls.Add((New-ActionButton 'Quitter' ([Drawing.Color]::FromArgb(75, 82, 96)) { $script:MainForm.Close() }), 0, 2)
-$buttons.SetColumnSpan($buttons.GetControlFromPosition(0, 2), 2)
+$buttons.Controls.Add((New-ActionButton 'Actualiser' ([Drawing.Color]::FromArgb(55, 105, 170)) {
+            $state = Update-Status
+            if ($null -ne $state) {
+                $script:MessageLabel.Text = 'État et liste des disques actualisés.'
+                $script:MessageLabel.ForeColor = [Drawing.Color]::FromArgb(91, 220, 160)
+            }
+        }), 0, 2)
+$buttons.Controls.Add((New-ActionButton 'Quitter' ([Drawing.Color]::FromArgb(75, 82, 96)) { $script:MainForm.Close() }), 1, 2)
 
 $script:MessageLabel = New-Object Windows.Forms.Label
 $script:MessageLabel.Dock = [Windows.Forms.DockStyle]::Fill
