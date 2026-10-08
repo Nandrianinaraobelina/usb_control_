@@ -7,10 +7,15 @@ fltmc >nul 2>&1
 if errorlevel 1 (
     rem Avereno alefa amin'ny alalan'ny UAC raha mbola tsy manana alalana.
     set "USB_CONTROL_SCRIPT=%~f0"
-    powershell -NoProfile -Command "Start-Process -FilePath $env:USB_CONTROL_SCRIPT -Verb RunAs"
-    if errorlevel 1 (
+    powershell -NoProfile -Command "try { Start-Process -FilePath $env:USB_CONTROL_SCRIPT -Verb RunAs -ErrorAction Stop; exit 0 } catch { if ($_.Exception.NativeErrorCode -eq 1223) { exit 1223 }; exit 1 }"
+    set "UAC_RESULT=%ERRORLEVEL%"
+    if not "%UAC_RESULT%"=="0" (
         echo.
-        echo Tsy nahazo alalana ho mpitantana.
+        if "%UAC_RESULT%"=="1223" (
+            echo Nofoananao ny fangatahana alalana ho mpitantana.
+        ) else (
+            echo Tsy afaka nandefa ny script tamin'ny alalana ho mpitantana.
+        )
         pause
         exit /b 1
     )
