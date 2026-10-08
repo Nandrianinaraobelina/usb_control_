@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 title Contrôle du stockage USB
 color 0A
 
@@ -19,7 +20,8 @@ if errorlevel 1 (
         pause
         exit /b 1
     )
-    exit /b
+    rem Ferme le terminal non administrateur après le lancement de la version élevée.
+    exit
 )
 
 if not defined USB_CONTROL_PASSWORD (

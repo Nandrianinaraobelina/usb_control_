@@ -2,6 +2,7 @@
 
 Ce projet contient un script Windows unique, `usb_control.bat`, qui permet de
 verrouiller ou de déverrouiller les périphériques de stockage USB.
+Le script configure la console en UTF-8 pour afficher correctement les accents.
 
 ## Aperçu
 
