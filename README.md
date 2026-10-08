@@ -1,12 +1,30 @@
 # Contrôle du stockage USB
 
-Ce projet contient un script Windows unique, `usb_control.bat`, qui permet de
-verrouiller ou de déverrouiller les périphériques de stockage USB.
-Le script configure la console en UTF-8 pour afficher correctement les accents.
+Ce projet contient `usb_control.bat`, un lanceur qui ouvre une interface
+graphique Windows. L’interface et la logique de contrôle sont dans
+`src/usb_control.ps1`.
+
+## Structure du projet
+
+```text
+usb_control.bat                 Lanceur Windows
+src/usb_control.ps1             Point d’entrée et assemblage de l’interface
+src/Modules/Actions.ps1          Opérations USB et confirmations
+src/Modules/Dialogs.ps1          Fenêtres, saisie masquée et boutons
+src/Modules/Storage.ps1          Registre, disques USB et journal
+assets/                          Images de l’application et documentation
+data/                            Journal et sauvegarde locale du Registre
+.gitignore                       Exclut les données locales générées
+README.md                        Documentation
+```
+
+Le script principal charge les modules de `src/Modules/` au démarrage.
 
 ## Aperçu
 
-![Menu de contrôle USB](usb-control-menu.png)
+![Menu de contrôle USB](assets/usb-control-menu.png)
+
+La photo d’arrière-plan de l’application est `assets/usb-control-background.jpg`.
 
 ## Utilisation
 
@@ -15,39 +33,26 @@ Le script configure la console en UTF-8 pour afficher correctement les accents.
 2. Fermez puis rouvrez votre terminal ou votre session Windows pour que la
    variable soit prise en compte.
 3. Lancez `usb_control.bat`. Windows demandera automatiquement l’autorisation
-   d’administrateur via l’UAC. Si vous refusez ou annulez la demande, le script
-   affichera un message explicite.
-4. Consultez l’état actuel affiché, puis choisissez une option dans le menu :
-   - `1` pour verrouiller le stockage USB ;
-   - `2` pour le déverrouiller ;
-   - `3` pour restaurer la valeur initiale du Registre ;
-   - `4` pour ouvrir le journal des opérations ;
-   - `5` pour quitter.
-5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
-6. Vérifiez le récapitulatif de l’état actuel et de l’action demandée, puis
-   tapez `OUI` pour confirmer la modification du Registre Windows.
+   d’administrateur via l’UAC. Seule l’interface administrateur reste ouverte.
+4. Consultez l’état du stockage USB et utilisez les boutons pour verrouiller,
+   déverrouiller, restaurer la valeur initiale, ouvrir le journal ou quitter.
+5. Saisissez le mot de passe dans la boîte de dialogue. La saisie est masquée.
+6. Vérifiez le récapitulatif et confirmez les modifications du Registre.
 
-Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
-d’administrateur sont nécessaires et seront demandés automatiquement. Après
-la modification, le script relit la valeur du Registre afin de vérifier que le
-changement a bien été appliqué.
-Si le stockage est déjà dans l’état demandé, le script ne réécrit pas le Registre.
+Le script modifie la valeur `Start` du service Windows `USBSTOR`, puis vérifie
+que la modification a bien été appliquée. Si le stockage est déjà dans l’état
+demandé, le Registre n’est pas réécrit.
 
-Le script vérifie aussi les disques USB actuellement connectés. Ceux-ci peuvent
-rester accessibles après le verrouillage ; déconnectez-les puis reconnectez-les
-après l’opération. Si Windows ne permet pas de vérifier leur présence, le
-script l’indique. Avant de verrouiller avec un disque connecté, il demande une
-confirmation supplémentaire ; vous pouvez annuler pour le déconnecter d’abord.
+Les disques USB déjà connectés peuvent rester accessibles après le verrouillage.
+Le script affiche un avertissement et demande confirmation avant de continuer.
 
 Avant le premier verrouillage ou déverrouillage, la valeur initiale de `Start`
-est enregistrée dans `usb_control.previous`, à côté du script. L’option `3`
-restaure cette valeur. Le fichier est marqué en lecture seule pour éviter une
-modification accidentelle. Conservez-le si vous souhaitez pouvoir revenir à la
-configuration d’origine.
+est enregistrée dans `data/usb_control.previous`. Le fichier est marqué en
+lecture seule afin d’éviter une modification accidentelle. L’option de
+restauration remet cette valeur.
 
-Les opérations et leurs résultats sont ajoutés à `usb_control.log`, à côté du
-script. Le journal contient la date, l’action et le résultat, jamais le mot de
-passe.
+Le journal des opérations est enregistré dans `data/usb_control.log`. Il indique
+la date, l’action et le résultat, sans jamais contenir le mot de passe.
 
 ## Remarques
 
@@ -57,4 +62,4 @@ passe.
 - Le mot de passe n’est pas enregistré dans les fichiers du projet. La variable
   d’environnement reste accessible à votre compte Windows et ne protège pas
   contre une personne ayant accès à cette session.
-- Pour déverrouiller le stockage USB, choisissez l’option `2`.
+- Les images de l’application sont rangées dans `assets/`.
