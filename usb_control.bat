@@ -2,7 +2,7 @@
 setlocal
 chcp 65001 >nul
 
-set "USB_CONTROL_SCRIPT=%~dp0usb_control.ps1"
+set "USB_CONTROL_SCRIPT=%~dp0src\usb_control.ps1"
 fltmc >nul 2>&1
 if errorlevel 1 (
     powershell.exe -NoProfile -Command "try { $arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ' + [char]34 + $env:USB_CONTROL_SCRIPT + [char]34; Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -Verb RunAs -ErrorAction Stop; exit 0 } catch { exit 1 }"

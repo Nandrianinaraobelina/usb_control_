@@ -5,10 +5,13 @@ Add-Type -AssemblyName System.Drawing
 [Windows.Forms.Application]::EnableVisualStyles()
 
 $script:RegistryPath = 'HKLM:\SYSTEM\CurrentControlSet\Services\USBSTOR'
-$script:RegistryKey = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR'
-$script:ScriptDirectory = $PSScriptRoot
-$script:LogPath = Join-Path $PSScriptRoot 'usb_control.log'
-$script:BackupPath = Join-Path $PSScriptRoot 'usb_control.previous'
+$script:ProjectRoot = Split-Path -Parent $PSScriptRoot
+$script:DataDirectory = Join-Path $script:ProjectRoot 'data'
+if (-not (Test-Path -LiteralPath $script:DataDirectory -PathType Container)) {
+    New-Item -Path $script:DataDirectory -ItemType Directory -ErrorAction Stop | Out-Null
+}
+$script:LogPath = Join-Path $script:DataDirectory 'usb_control.log'
+$script:BackupPath = Join-Path $script:DataDirectory 'usb_control.previous'
 $script:Password = [Environment]::GetEnvironmentVariable('USB_CONTROL_PASSWORD')
 $script:MainForm = $null
 $script:BackgroundImage = $null
@@ -322,7 +325,7 @@ $script:MainForm.StartPosition = 'CenterScreen'
 $script:MainForm.ClientSize = New-Object Drawing.Size(850, 660)
 $script:MainForm.MinimumSize = New-Object Drawing.Size(760, 620)
 $script:MainForm.BackColor = [Drawing.Color]::FromArgb(17, 24, 39)
-$script:BackgroundImage = [Drawing.Image]::FromFile((Join-Path $PSScriptRoot 'usb-control-background.jpg'))
+$script:BackgroundImage = [Drawing.Image]::FromFile((Join-Path $script:ProjectRoot 'assets\usb-control-background.jpg'))
 $script:MainForm.BackgroundImage = $script:BackgroundImage
 $script:MainForm.BackgroundImageLayout = [Windows.Forms.ImageLayout]::Zoom
 $script:MainForm.ForeColor = [Drawing.Color]::White
