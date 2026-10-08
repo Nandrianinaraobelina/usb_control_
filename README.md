@@ -1,12 +1,8 @@
 # Contrôle du stockage USB
 
-Ce projet contient un script Windows unique, `usb_control.bat`, qui permet de
-verrouiller ou de déverrouiller les périphériques de stockage USB.
-Le script configure la console en UTF-8 pour afficher correctement les accents.
-
-## Aperçu
-
-![Menu de contrôle USB](usb-control-menu.png)
+Ce projet contient `usb_control.bat`, un lanceur qui ouvre une interface
+graphique Windows plus lisible. L’interface et ses fonctions sont définies dans
+`usb_control.ps1`.
 
 ## Utilisation
 
@@ -16,16 +12,13 @@ Le script configure la console en UTF-8 pour afficher correctement les accents.
    variable soit prise en compte.
 3. Lancez `usb_control.bat`. Windows demandera automatiquement l’autorisation
    d’administrateur via l’UAC. Si vous refusez ou annulez la demande, le script
-   affichera un message explicite.
-4. Consultez l’état actuel affiché, puis choisissez une option dans le menu :
-   - `1` pour verrouiller le stockage USB ;
-   - `2` pour le déverrouiller ;
-   - `3` pour restaurer la valeur initiale du Registre ;
-   - `4` pour ouvrir le journal des opérations ;
-   - `5` pour quitter.
-5. Saisissez le mot de passe configuré. La saisie reste masquée à l’écran.
-6. Vérifiez le récapitulatif de l’état actuel et de l’action demandée, puis
-   tapez `OUI` pour confirmer la modification du Registre Windows.
+   affichera un message explicite. Seule l’interface administrateur reste
+   ouverte.
+4. Consultez l’état du stockage USB et utilisez les grands boutons pour
+   verrouiller, déverrouiller, restaurer la valeur initiale, ouvrir le journal
+   ou quitter.
+5. Saisissez le mot de passe dans la boîte de dialogue. La saisie est masquée.
+6. Vérifiez le récapitulatif et confirmez les modifications du Registre.
 
 Le script modifie la valeur `Start` du service Windows `USBSTOR`. Les droits
 d’administrateur sont nécessaires et seront demandés automatiquement. Après
