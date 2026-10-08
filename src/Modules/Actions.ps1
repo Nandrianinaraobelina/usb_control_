@@ -1,4 +1,20 @@
 ﻿function Update-Status {
+    $script:RestoreButton.Enabled = Test-Path -LiteralPath $script:BackupPath -PathType Leaf
+    $script:RestoreButton.Text = 'Restaurer la valeur initiale'
+    if ($script:RestoreButton.Enabled) {
+        try {
+            $backupText = (Get-Content -LiteralPath $script:BackupPath -Raw -ErrorAction Stop).Trim()
+            $backupValue = [uint32]0
+            if ([uint32]::TryParse($backupText, [ref]$backupValue)) {
+                $script:RestoreButton.Text = 'Restaurer la valeur initiale (0x{0:X})' -f $backupValue
+            } else {
+                $script:RestoreButton.Text = 'Restaurer la valeur initiale (sauvegarde invalide)'
+            }
+        } catch {
+            $script:RestoreButton.Text = 'Restaurer la valeur initiale (lecture impossible)'
+        }
+    }
+
     try {
         $state = Get-UsbState
         $script:StateLabel.Text = "État actuel : $($state.Text)  ($($state.Hex))"

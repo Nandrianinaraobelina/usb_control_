@@ -19,6 +19,7 @@ $script:StateLabel = $null
 $script:DiskWarningLabel = $null
 $script:MessageLabel = $null
 $script:UsbDiskList = $null
+$script:RestoreButton = $null
 
 . (Join-Path $PSScriptRoot 'Modules\Storage.ps1')
 . (Join-Path $PSScriptRoot 'Modules\Dialogs.ps1')
@@ -105,7 +106,9 @@ $buttons.RowCount = 3
 [void]$buttons.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Percent, 33.34)))
 $buttons.Controls.Add((New-ActionButton 'Verrouiller le stockage USB' ([Drawing.Color]::FromArgb(190, 70, 68)) { Invoke-UsbAction -Action Lock }), 0, 0)
 $buttons.Controls.Add((New-ActionButton 'Déverrouiller le stockage USB' ([Drawing.Color]::FromArgb(35, 135, 100)) { Invoke-UsbAction -Action Unlock }), 1, 0)
-$buttons.Controls.Add((New-ActionButton 'Restaurer la valeur initiale' ([Drawing.Color]::FromArgb(80, 95, 125)) { Invoke-UsbAction -Action Restore }), 0, 1)
+$script:RestoreButton = New-ActionButton 'Restaurer la valeur initiale' ([Drawing.Color]::FromArgb(80, 95, 125)) { Invoke-UsbAction -Action Restore }
+$script:RestoreButton.Enabled = $false
+$buttons.Controls.Add($script:RestoreButton, 0, 1)
 $buttons.Controls.Add((New-ActionButton 'Ouvrir le journal des opérations' ([Drawing.Color]::FromArgb(55, 105, 170)) {
             if (Test-Path -LiteralPath $script:LogPath -PathType Leaf) {
                 Start-Process -FilePath notepad.exe -ArgumentList ('"{0}"' -f $script:LogPath)

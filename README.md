@@ -46,6 +46,8 @@ La photo d’arrière-plan de l’application est `assets/usb-control-background
    modèle, capacité et lettre de lecteur. Utilisez **Actualiser** pour relire
    l’état et la liste, ou les boutons pour verrouiller, déverrouiller, restaurer
    la valeur initiale, ouvrir le journal ou quitter.
+   Le bouton de restauration reste désactivé tant que la sauvegarde initiale
+   n’existe pas et affiche sa valeur lorsqu’elle est disponible.
 5. Saisissez le mot de passe dans la boîte de dialogue. La saisie est masquée.
 6. Vérifiez le récapitulatif et confirmez les modifications du Registre.
 
