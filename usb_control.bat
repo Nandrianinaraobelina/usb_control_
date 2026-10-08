@@ -67,11 +67,13 @@ if defined USB_CONNECTED_COUNT (
 echo.
 echo 1. Verrouiller le stockage USB
 echo 2. Déverrouiller le stockage USB
-echo 3. Quitter
+echo 3. Restaurer la valeur initiale du Registre
+echo 4. Quitter
 echo.
-set /p ACTION=Choisissez une option (1, 2 ou 3) :
+set /p ACTION=Choisissez une option (1, 2, 3 ou 4) :
 
-if "%ACTION%"=="3" exit /b 0
+if "%ACTION%"=="4" exit /b 0
+set "USB_RESTORE=0"
 if "%ACTION%"=="1" (
     rem La valeur 4 désactive le service USBSTOR.
     set "USB_START=4"
@@ -80,12 +82,36 @@ if "%ACTION%"=="1" (
     rem La valeur 3 réactive le service USBSTOR.
     set "USB_START=3"
     set "ACTION_NAME=DÉVERROUILLÉ"
+) else if "%ACTION%"=="3" (
+    set "USB_RESTORE=1"
+    set "ACTION_NAME=RESTAURATION"
 ) else (
     echo.
     echo Option invalide.
     call :LOG "INCONNUE" "OPTION_INVALIDE"
     pause
     exit /b 1
+)
+
+if "%USB_RESTORE%"=="1" (
+    if not exist "%USB_CONTROL_SCRIPT_DIR%usb_control.previous" (
+        echo.
+        echo Aucune valeur initiale n'est enregistree. Impossible de restaurer.
+        call :LOG "%ACTION_NAME%" "VALEUR_INITIALE_ABSENTE"
+        pause
+        exit /b 1
+    )
+    set /p USB_START=<"%USB_CONTROL_SCRIPT_DIR%usb_control.previous"
+    for /f %%A in ('powershell -NoProfile -Command "try { $value = [uint32]::Parse($env:USB_START); '0x{0:x}' -f $value } catch { exit 1 }" 2^>nul') do set "USB_EXPECTED=%%A"
+    if not defined USB_EXPECTED (
+        echo.
+        echo La sauvegarde de la valeur initiale est invalide.
+        call :LOG "%ACTION_NAME%" "SAUVEGARDE_INVALIDE"
+        pause
+        exit /b 1
+    )
+) else (
+    set "USB_EXPECTED=0x%USB_START%"
 )
 
 echo.
@@ -108,6 +134,17 @@ if /i not "%CONFIRM%"=="OUI" (
     exit /b 0
 )
 
+if "%USB_RESTORE%"=="0" if not exist "%USB_CONTROL_SCRIPT_DIR%usb_control.previous" (
+    powershell -NoProfile -Command "try { $value = [Convert]::ToUInt32($env:USB_CURRENT.Substring(2), 16); $value.ToString() } catch { exit 1 }" > "%USB_CONTROL_SCRIPT_DIR%usb_control.previous"
+    if errorlevel 1 (
+        echo.
+        echo Impossible d'enregistrer la valeur initiale du Registre.
+        call :LOG "%ACTION_NAME%" "ECHEC_SAUVEGARDE"
+        pause
+        exit /b 1
+    )
+)
+
 rem Modifie la valeur USBSTOR dans le registre Windows.
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start /t REG_DWORD /d %USB_START% /f >nul
 if errorlevel 1 (
@@ -121,9 +158,9 @@ if errorlevel 1 (
 rem Vérifie que la valeur demandée a bien été écrite.
 set "USB_VERIFY="
 for /f "tokens=3" %%A in ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v Start 2^>nul ^| findstr /i "Start"') do set "USB_VERIFY=%%A"
-if /i not "%USB_VERIFY%"=="0x%USB_START%" (
+if /i not "%USB_VERIFY%"=="%USB_EXPECTED%" (
     echo.
-    echo Vérification échouée. Valeur attendue : 0x%USB_START% ; valeur lue : %USB_VERIFY%.
+    echo Vérification échouée. Valeur attendue : %USB_EXPECTED% ; valeur lue : %USB_VERIFY%.
     call :LOG "%ACTION_NAME%" "ECHEC_VERIFICATION"
     pause
     exit /b 1
